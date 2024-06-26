@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>File Upload</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4">Room Allocation App</h1>
+      <form method="post" action="{{ url_for('upload_file') }}" enctype="multipart/form-data" class="mb-4">
+        <div class="form-group">
+          <label for="group_file">Group File</label>
+          <input type="file" class="form-control-file" id="group_file" name="group_file">
+        </div>
+        <div class="form-group">
+          <label for="hostel_file">Hostel File</label>
+          <input type="file" class="form-control-file" id="hostel_file" name="hostel_file">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="alert alert-warning" role="alert">
+        {% for message in messages %}
+          {{ message }}<br>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+      {% if result %}
+      <h2 class="mt-4">Allocation Results</h2>
+      <div class="accordion" id="allocationResults">
+        {% for item in result %}
+        <div class="card">
+          <div class="card-header" id="heading{{ loop.index }}">
+            <h2 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
+                {{ item.Hostel }}
+              </button>
+            </h2>
+          </div>
+          <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}" data-parent="#allocationResults">
+            <div class="card-body">
+              <ul class="list-group">
+                {% for student in item.Allocated %}
+                <li class="list-group-item">{{ student.StudentID }} - {{ student.Name }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <footer>
+            <p>&copy; 2024 HARSH SHIRKE - CA-053107251009 </p>
+        </footer>
+
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
